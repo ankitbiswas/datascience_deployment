@@ -1,6 +1,6 @@
 from src.datascience_deployment.constants import CONFIG_FILE_PATH,PARAMS_FILE_PATH,SCHEMA_FILE_PATH
 from src.datascience_deployment.utils.common import read_yaml,create_directories
-from src.datascience_deployment.entity.config_entity import (DataIngestionConfig,DataValidationConfig,DataTransformationConfig)
+from src.datascience_deployment.entity.config_entity import (DataIngestionConfig,DataValidationConfig,DataTransformationConfig,ModelTrainConfig)
 
 import shutil
 
@@ -55,4 +55,25 @@ class ConfigurationManager:
         )
 
         return data_transformation_config
+    
+
+    def get_model_train_config(self)->ModelTrainConfig:
+        config=self.config.model_train
+        params=self.params.ElasticNet
+        schema = self.schema.TARGET
+        create_directories([config.root_dir])
+
+        model_train_config = ModelTrainConfig(
+            root_dir=config.root_dir,
+            train_data_path=config.train_data_path,
+            test_data_path=config.test_data_path,
+            model_name=config.model_name,
+            alpha = params.alpha,
+            l1_ratio=params.l1_ratio,
+            target_column=schema.name
+
+        )
+
+        return model_train_config
+
 
